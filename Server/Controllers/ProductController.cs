@@ -77,4 +77,23 @@ public class ProductController : Controller
         return NoContent();
     }
 
+    [HttpDelete]
+    [Route("Delete/{id}")]
+    public async Task<ActionResult<Product>> Delete(int id)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        var product = await db.Products.FindAsync(id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+        db.Products.Remove(product);
+        await db.SaveChangesAsync();
+        return Ok(product);
+    }
+
+
 }
